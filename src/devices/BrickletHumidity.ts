@@ -10,7 +10,7 @@ export class BrickletHumidity extends Bricklet {
         statement += "INSERT INTO brickletHumidity VALUES ('";
         statement += this.brickletHumidityID + "',";
         statement += "'" + this.brickMasterID + "',";
-        statement += "'" + this.uid + "',";
+        statement += "'" + this.uid + "'";
         statement += ")";
         return statement;
     }

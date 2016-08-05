@@ -10,7 +10,7 @@ export class BrickletBarometer extends Bricklet {
         statement += "INSERT INTO brickletBarometer VALUES ('";
         statement += this.brickletBarometerID + "',";        
         statement += "'" + this.brickMasterID + "',";
-        statement += "uid = '" + this.uid + "',";
+        statement += "'" + this.uid + "'";
         statement += ")";
         return statement;
     }

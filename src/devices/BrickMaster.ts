@@ -2,6 +2,10 @@ import { BaseObject } from "../data/BaseObject";
 import { BaseReport } from "../reports/baseReport";
 import { Bricklet } from "./Bricklet";
 
+import { BrickletHumidity } from "./BrickletHumidity";
+import { BrickletBarometer } from "./BrickletBarometer";
+import { BrickletTemperature } from "./BrickletTemperature";
+
 export class BrickMaster extends Bricklet {    
     public uid: string;
     public ipAddress: string;
@@ -9,10 +13,10 @@ export class BrickMaster extends Bricklet {
     public generateInsertStatement(): string {
         var statement = "";        
         statement += "INSERT INTO brickMaster VALUES ('";
-        statement += this.brickMasterID + "'" + ",";
-        statement += "uid = '" + this.uid + "',";
-        statement += "ipAddress = '" + this.ipAddress + "',";
-        statement += "port = " + this.port + ",";
+        statement += this.brickMasterID + "'" + ",";        
+        statement += "'" + this.ipAddress + "',";
+        statement += + this.port+ ",";
+        statement += "'" + this.uid + "'";
         statement += ")";
         return statement;
     }
@@ -47,7 +51,7 @@ export class BrickMaster extends Bricklet {
     protected getData(): any {
         var data: any = {};
         data.brickMasterID = this.brickMasterID;     
-                data.uid = this.uid;
+        data.uid = this.uid;
         data.ipAddress = this.ipAddress;
         data.port = this.port;
         return data;
@@ -60,5 +64,20 @@ export class BrickMaster extends Bricklet {
     }
     public generateGetByParentIDStatement(id: string): string {
         return "";
+    }
+    private brickletBarometer: BrickletBarometer;
+    public addBrickletBarometer(bricklet: BrickletBarometer) {
+        bricklet.brickMasterID = this.brickMasterID;
+        this.brickletBarometer = bricklet;
+    }
+    private brickletTemperature: BrickletTemperature;
+    public addBrickletTemperature(bricklet: BrickletTemperature) {
+        bricklet.brickMasterID = this.brickMasterID;
+        this.brickletTemperature = bricklet;
+    }
+    private brickletHumidity: BrickletHumidity;
+    public addBrickletHumidity(bricklet: BrickletHumidity) {
+        bricklet.brickMasterID = this.brickMasterID;
+        this.brickletHumidity = bricklet;
     }
 }

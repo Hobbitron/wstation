@@ -99,9 +99,8 @@ export abstract class BaseObject {
 
     private createDatabase(db: Database.Database) {
         db.serialize(() => {
-            db.run(this.getDatabaseSchemaStatement());
-            db.close();
-        })        
+            db.run(this.getDatabaseSchemaStatement());            
+        })
     }
     abstract getDatabaseSchemaStatement(): string;
     abstract generateInsertStatement(): string;

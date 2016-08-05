@@ -12,6 +12,9 @@ var bodyParser = require('body-parser');
 import fs = require('fs');
 
 import { BrickMaster } from "./src/devices/BrickMaster";
+import { BrickletHumidity } from "./src/devices/BrickletHumidity";
+import { BrickletBarometer } from "./src/devices/BrickletBarometer";
+import { BrickletTemperature } from "./src/devices/BrickletTemperature";
 import { BrickletBarometerReport } from "./src/reports/BrickletBarometerReport"
 import { BrickletHumidityReport } from "./src/reports/BrickletHumidityReport"
 import { BrickletTemperatureReport } from "./src/reports/BrickletTemperatureReport"
@@ -39,10 +42,105 @@ router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api for a weather station!' });   
 });
 
-
+router.route('/brickmaster')
+    .put((req, res) => {
+        let bm = new BrickMaster();
+        bm.setJson(req.body);
+        bm.save(() => {
+            res.json(bm.getJson());
+        });
+    });
+router.route('/brickmaster/:id')
+    .get((req,res) => {
+        let bm = new BrickMaster();
+        bm.brickMasterID = req.params.id;
+        bm.load(req.params.id, () => {
+            res.json(bm.getJson());
+        });
+    });
+router.route('/brickmaster/:id/bricklets')
+    .get((req,res) => {
+        let bb = new BrickletBarometer();
+        let bt = new BrickletTemperature();
+        let bh = new BrickletHumidity();
+        bb.
+    });
+router.route('/brickmaster/:id/brickletbarometer')
+    .put((req,res) => {
+        let bm = new BrickMaster();
+        bm.load(req.params.id, () => {
+            let b = new BrickletBarometer();        
+            b.setJson(req.body);
+            bm.addBrickletBarometer(b);
+            bm.save(() => {
+                res.json(b.getJson());
+            })
+        })
+    });
+router.route('/brickmaster/:id/bricklettemperature')
+    .put((req,res) => {
+        let b = new BrickletTemperature();        
+        b.setJson(req.body);
+        b.brickMasterID = req.params.id;
+        b.save(() => {
+            res.json(b.getJson());
+        })
+    });
+router.route('/brickmaster/:id/bricklethumidity')
+    .put((req,res) => {
+        let b = new BrickletHumidity();        
+        b.setJson(req.body);
+        b.brickMasterID = req.params.id;
+        b.save(() => {
+            res.json(b.getJson());
+        })
+    });
+router.route('/brickletbarometer')
+    .put((req, res) => {
+        let bb = new BrickletBarometer();
+        bb.setJson(req.body);
+        bb.save(() => {
+            res.json(bb.getJson());
+        });
+    });
+router.route('/brickletbarometer/:id')
+    .get((req,res) => {
+        let bb = new BrickletBarometer();
+        bb.load(req.params('id'), () => {
+            res.json(bb.getJson());
+        });
+    });
+router.route('/bricklettemperature')
+    .put((req, res) => {
+        let bt = new BrickletTemperature();
+        bt.setJson(req.body);
+        bt.save(() => {
+            res.json(bt.getJson());
+        });
+    });
+router.route('/bricklettemperature/:id')
+    .get((req,res) => {
+        let bt = new BrickletTemperature();
+        bt.load(req.param('id'), () => {
+            res.json(bt.getJson());
+        });
+    });
+router.route('/bricklethumidity')
+    .put((req, res) => {
+        let bh = new BrickletHumidity();
+        bh.setJson(req.body);
+        bh.save(() => {
+            res.json(bh.getJson());
+        });
+    });
+router.route('/bricklethumidity/:id')
+    .get((req,res) => {
+        let bh = new BrickletHumidity();
+        bh.load(req.param('id'), () => {
+            res.json(bh.getJson());
+        });        
+    });
 router.route('/brickmaster/:id/brickletbarometerreport')
-
-    // create a bear (accessed at POST http://localhost:8080/api/bears)
     .put(function(req, res) {
         let bbr = new BrickletBarometerReport();
         bbr.setJson(req.body);
@@ -55,8 +153,6 @@ router.route('/brickmaster/:id/brickletbarometerreport')
     });
 
 router.route('/brickmaster/:id/bricklethumidityreport')
-
-    // create a bear (accessed at POST http://localhost:8080/api/bears)
     .put(function(req, res) {
         let bhr = new BrickletHumidityReport();
         bhr.setJson(req.body);
@@ -64,21 +160,13 @@ router.route('/brickmaster/:id/bricklethumidityreport')
             res.json({});
         });
     })
-
-router.route('/brickmaster/:id/bricklettemperaturereport')
-
-    // create a bear (accessed at POST http://localhost:8080/api/bears)
+router.route('/brickmaster/:id/bricklettemperaturereport')    
     .put(function(req, res) {
         let btr = new BrickletTemperatureReport();
         btr.setJson(req.body);
         btr.save(() => {
             res.json({});
         });
-    })
-
-router.route('weatherstations')
-    .get(function(req, res) {
-        //load all weather stations
     })
 
 // more routes for our API will happen here

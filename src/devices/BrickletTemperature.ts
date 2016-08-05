@@ -12,7 +12,7 @@ extends Bricklet {
         statement += "INSERT INTO brickletTemperature VALUES ('";
         statement += this.brickletTemperatureID + "',";
         statement += "'" + this.brickMasterID + "'," 
-        statement += "'" + this.uid + "',";
+        statement += "'" + this.uid + "'";
         statement += ")";
         return statement;
     }
@@ -53,7 +53,7 @@ extends Bricklet {
         return "brickletTemperature.db";
     }
     public getDatabaseSchemaStatement(): string {
-        return "CREATE TABLE brickletTemperature (brickletTemperatureID TEXT, uid TEXT, brickMasterID TEXT)";
+        return "CREATE TABLE brickletTemperature (brickletTemperatureID TEXT, brickMasterID TEXT, uid TEXT)";
     }
     public generateGetByParentIDStatement(id: string): string {
         return "SELECT * FROM brickletTemperature where brickMasterID = '" + this.brickMasterID + "'";
