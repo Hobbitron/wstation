@@ -15,6 +15,14 @@
     "files": [
         "server.ts",
         "src/data/baseobject.ts",
-        "src/devices/weatherstation.ts"
+        "src/devices/Bricklet.ts",
+        "src/devices/BrickletBarometer.ts",
+        "src/devices/BrickletHumidity.ts",
+        "src/devices/BrickletTemperature.ts",
+        "src/devices/BrickMaster.ts",
+        "src/reports/BaseReport.ts",
+        "src/reports/BrickletBarometerReport.ts",
+        "src/reports/BrickletHumidityReport.ts",
+        "src/reports/BrickletTemperatureReport.ts"        
     ]
 }

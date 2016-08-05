@@ -1,3 +1,6 @@
+/// <reference path="./typings/index.d.ts" />
+
+
 // BASE SETUP
 // =============================================================================
 
@@ -8,7 +11,10 @@ var bodyParser = require('body-parser');
 
 import fs = require('fs');
 
-import { WeatherStation } from "./src/devices/weatherstation";
+import { BrickMaster } from "./src/devices/BrickMaster";
+import { BrickletBarometerReport } from "./src/reports/BrickletBarometerReport"
+import { BrickletHumidityReport } from "./src/reports/BrickletHumidityReport"
+import { BrickletTemperatureReport } from "./src/reports/BrickletTemperatureReport"
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -30,28 +36,45 @@ router.use(function(req, res, next) {
 
 // test route to make sure everything is working (accessed at GET http://localhost:{{port}}/api)
 router.get('/', function(req, res) {
-    res.json({ message: 'hooray! welcome to our api!' });   
+    res.json({ message: 'hooray! welcome to our api for a weather station!' });   
 });
 
-router.route('/weatherstation')
+
+router.route('/brickmaster/:id/brickletbarometerreport')
 
     // create a bear (accessed at POST http://localhost:8080/api/bears)
-    .post(function(req, res) {
-        let ws = new WeatherStation();
-        ws.setJson(req.body);
-        console.log("saving");
-        ws.save(() => {
-            res.json(ws.getJson());
+    .put(function(req, res) {
+        let bbr = new BrickletBarometerReport();
+        bbr.setJson(req.body);
+        bbr.save(() => {
+            res.json({});
         });
     })
     .get(function(req, res) {
-        if (req.param('id')) {
-            let ws = new WeatherStation();
-            ws.load(req.param('id'), () => {
-                res.json(ws.getJson());
-            })
-        }
+        res.json({ message: 'hooray! welcome to our api for reporting brickletbarometer!' });   
     });
+
+router.route('/brickmaster/:id/bricklethumidityreport')
+
+    // create a bear (accessed at POST http://localhost:8080/api/bears)
+    .put(function(req, res) {
+        let bhr = new BrickletHumidityReport();
+        bhr.setJson(req.body);
+        bhr.save(() => {
+            res.json({});
+        });
+    })
+
+router.route('/brickmaster/:id/bricklettemperaturereport')
+
+    // create a bear (accessed at POST http://localhost:8080/api/bears)
+    .put(function(req, res) {
+        let btr = new BrickletTemperatureReport();
+        btr.setJson(req.body);
+        btr.save(() => {
+            res.json({});
+        });
+    })
 
 router.route('weatherstations')
     .get(function(req, res) {

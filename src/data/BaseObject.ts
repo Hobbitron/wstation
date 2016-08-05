@@ -16,7 +16,7 @@ export abstract class BaseObject {
         return uuid;
     }
     private isNew: boolean = true;
-    public save(callback: Function) {        
+    public save(callback: Function) {                
         var file = this.getDatabaseName();
         var exists = fs.existsSync(file);
         var db = new sqlite3.Database(file);
@@ -45,18 +45,7 @@ export abstract class BaseObject {
                     callback();
                 });                
             });
-            stmt.finalize();            
-            // var stmt = db.prepare(this.generateGetByIDStatement(), (err, row) => {
-            //     console.log("get done");                
-            //     if (err) {
-            //         throw err;
-            //     } else {
-            //         this.setData(row);
-            //         this.isNew = false;
-            //     }
-            // })
-            
-            // console.log("write done");                                   
+            stmt.finalize();                                             
         });   
     }
 
