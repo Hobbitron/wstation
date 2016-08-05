@@ -28,7 +28,7 @@ router.use(function(req, res, next) {
     next(); // make sure we go to the next routes and don't stop here
 });
 
-// test route to make sure everything is working (accessed at GET http://localhost:8080/api)
+// test route to make sure everything is working (accessed at GET http://localhost:{{port}}/api)
 router.get('/', function(req, res) {
     res.json({ message: 'hooray! welcome to our api!' });   
 });
@@ -37,7 +37,7 @@ router.route('/weatherstation')
 
     // create a bear (accessed at POST http://localhost:8080/api/bears)
     .post(function(req, res) {
-        var ws = new WeatherStation();
+        let ws = new WeatherStation();
         ws.setJson(req.body);
         console.log("saving");
         ws.save(() => {
@@ -45,8 +45,18 @@ router.route('/weatherstation')
         });
     })
     .get(function(req, res) {
-        
-    });;
+        if (req.param('id')) {
+            let ws = new WeatherStation();
+            ws.load(req.param('id'), () => {
+                res.json(ws.getJson());
+            })
+        }
+    });
+
+router.route('weatherstations')
+    .get(function(req, res) {
+        //load all weather stations
+    })
 
 // more routes for our API will happen here
 

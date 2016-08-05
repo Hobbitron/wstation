@@ -83,24 +83,26 @@ export abstract class BaseObject {
         })
     }
 
-    public loadByParentID(id: string, callback: Function) {
+    public loadByParentID(id: string, callback: Function, childObj: any) {
         var file = this.getDatabaseName();
         var exists = fs.existsSync(file);
         var db = new sqlite3.Database(file);
         if (!exists) {
             this.createDatabase(db);
-        }   
+        }
+        var results = new Array<any>();
         db.serialize(() => {            
-            db.get(this.generateGetByParentIDStatement(id), (err, row) => {                
+            db.each(this.generateGetByParentIDStatement(id), (err, row) => {                
                 if (err) {
                     throw err;
                 } else {
                     if (row) {
-                        this.setData(row);
-                        this.isNew = false;
+                        var child = new childObj();
+                        child.setData(row);             
+                        results.push(child);           
                     }
                 }
-                callback();
+                callback(results);
             })
             db.close();
         })
